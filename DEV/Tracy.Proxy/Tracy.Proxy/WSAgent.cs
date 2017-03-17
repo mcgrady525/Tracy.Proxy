@@ -51,7 +51,7 @@ namespace Tracy.Proxy
                 var result = func();
                 stopWatch.Stop();
                 PerfLog.Duration = stopWatch.ElapsedMilliseconds;
-                ResponseXml = result.ToXml();
+                ResponseXml = result.ToXml(isNeedFormat: true);
                 return result;
             }
             catch
