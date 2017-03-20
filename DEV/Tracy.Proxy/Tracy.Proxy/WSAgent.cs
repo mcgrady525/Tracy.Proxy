@@ -27,6 +27,11 @@ namespace Tracy.Proxy
         public string ResponseXml { get; set; }
 
         /// <summary>
+        /// 返回结果是否不需要序列化为xml，默认为false即需要序列化
+        /// </summary>
+        public bool IsNotNeedResultToXml { get; set; }
+
+        /// <summary>
         /// xml日志
         /// </summary>
         private XmlLog XmlLog { get; set; }
@@ -51,7 +56,14 @@ namespace Tracy.Proxy
                 var result = func();
                 stopWatch.Stop();
                 PerfLog.Duration = stopWatch.ElapsedMilliseconds;
-                ResponseXml = result.ToXml(isNeedFormat: true);
+                if (!IsNotNeedResultToXml)
+                {
+                    ResponseXml = result.ToXml(isNeedFormat: true);
+                }
+                else
+                {
+                    ResponseXml = result.ToString();
+                }
                 return result;
             }
             catch
