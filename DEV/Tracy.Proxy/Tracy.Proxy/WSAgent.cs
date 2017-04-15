@@ -32,6 +32,11 @@ namespace Tracy.Proxy
         public bool IsNotNeedResultToXml { get; set; }
 
         /// <summary>
+        /// 是否写xml日志和性能日志到日志系统
+        /// </summary>
+        public bool IsWriteToLogSystem { get; set; }
+
+        /// <summary>
         /// xml日志
         /// </summary>
         private XmlLog XmlLog { get; set; }
@@ -83,14 +88,17 @@ namespace Tracy.Proxy
         /// </summary>
         private void WriteXmlLog()
         {
-            XmlLog.SystemCode = SystemCode;
-            XmlLog.ClassName = ClassName;
-            XmlLog.MethodName = MethodName;
-            XmlLog.RQ = RequestXml;
-            XmlLog.RS = ResponseXml;
-            XmlLog.Remark = "SSharing.Proxy";
+            if (IsWriteToLogSystem)
+            {
+                XmlLog.SystemCode = SystemCode;
+                XmlLog.ClassName = ClassName;
+                XmlLog.MethodName = MethodName;
+                XmlLog.RQ = RequestXml;
+                XmlLog.RS = ResponseXml;
+                XmlLog.Remark = "SSharing.Proxy";
 
-            LogClientHelper.Xml(XmlLog);
+                LogClientHelper.Xml(XmlLog); 
+            }
         }
 
         /// <summary>
@@ -98,12 +106,15 @@ namespace Tracy.Proxy
         /// </summary>
         private void WritePerfLog()
         {
-            PerfLog.SystemCode = SystemCode;
-            PerfLog.ClassName = ClassName;
-            PerfLog.MethodName = MethodName;
-            PerfLog.Remark = "SSharing.Proxy";
+            if (IsWriteToLogSystem)
+            {
+                PerfLog.SystemCode = SystemCode;
+                PerfLog.ClassName = ClassName;
+                PerfLog.MethodName = MethodName;
+                PerfLog.Remark = "SSharing.Proxy";
 
-            LogClientHelper.Performance(PerfLog);
+                LogClientHelper.Performance(PerfLog); 
+            }
         }
 
     }
