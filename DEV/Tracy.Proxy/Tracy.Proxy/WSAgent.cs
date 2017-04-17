@@ -22,6 +22,8 @@ namespace Tracy.Proxy
 
         public string MethodName { get; set; }
 
+        public string MethodCName { get; set; }
+
         public string RequestXml { get; set; }
 
         public string ResponseXml { get; set; }
@@ -39,17 +41,17 @@ namespace Tracy.Proxy
         /// <summary>
         /// xml日志
         /// </summary>
-        private XmlLog XmlLog { get; set; }
+        private XmlLog _XmlLog { get; set; }
 
         /// <summary>
         /// 性能日志
         /// </summary>
-        private PerformanceLog PerfLog { get; set; }
+        private PerformanceLog _PerfLog { get; set; }
 
         public WSAgent()
         {
-            XmlLog = new XmlLog { Source = "SSharing.Proxy" };
-            PerfLog = new PerformanceLog { Source = "SSharing.Proxy" };
+            _XmlLog = new XmlLog { Source = "SSharing.Proxy" };
+            _PerfLog = new PerformanceLog { Source = "SSharing.Proxy" };
         }
 
         public TResponse Request<TResponse>(Func<TResponse> func)
@@ -60,7 +62,7 @@ namespace Tracy.Proxy
                 stopWatch.Start();
                 var result = func();
                 stopWatch.Stop();
-                PerfLog.Duration = stopWatch.ElapsedMilliseconds;
+                _PerfLog.Duration = stopWatch.ElapsedMilliseconds;
                 if (!IsNotNeedResultToXml)
                 {
                     ResponseXml = result.ToXml(isNeedFormat: true);
@@ -90,14 +92,15 @@ namespace Tracy.Proxy
         {
             if (IsWriteToLogSystem)
             {
-                XmlLog.SystemCode = SystemCode;
-                XmlLog.ClassName = ClassName;
-                XmlLog.MethodName = MethodName;
-                XmlLog.RQ = RequestXml;
-                XmlLog.RS = ResponseXml;
-                XmlLog.Remark = "SSharing.Proxy";
+                _XmlLog.SystemCode = SystemCode;
+                _XmlLog.ClassName = ClassName;
+                _XmlLog.MethodName = MethodName;
+                _XmlLog.MethodCName = MethodCName;
+                _XmlLog.RQ = RequestXml;
+                _XmlLog.RS = ResponseXml;
+                _XmlLog.Remark = "SSharing.Proxy";
 
-                LogClientHelper.Xml(XmlLog); 
+                LogClientHelper.Xml(_XmlLog); 
             }
         }
 
@@ -108,12 +111,13 @@ namespace Tracy.Proxy
         {
             if (IsWriteToLogSystem)
             {
-                PerfLog.SystemCode = SystemCode;
-                PerfLog.ClassName = ClassName;
-                PerfLog.MethodName = MethodName;
-                PerfLog.Remark = "SSharing.Proxy";
+                _PerfLog.SystemCode = SystemCode;
+                _PerfLog.ClassName = ClassName;
+                _PerfLog.MethodName = MethodName;
+                _PerfLog.MethodCName = MethodCName;
+                _PerfLog.Remark = "SSharing.Proxy";
 
-                LogClientHelper.Performance(PerfLog); 
+                LogClientHelper.Performance(_PerfLog); 
             }
         }
 
