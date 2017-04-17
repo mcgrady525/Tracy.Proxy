@@ -34,7 +34,7 @@ namespace Tracy.Proxy
         public bool IsNotNeedResultToXml { get; set; }
 
         /// <summary>
-        /// 是否写xml日志和性能日志到日志系统
+        /// 是否写xml日志和性能日志到日志系统，默认为true开启
         /// </summary>
         public bool IsWriteToLogSystem { get; set; }
 
