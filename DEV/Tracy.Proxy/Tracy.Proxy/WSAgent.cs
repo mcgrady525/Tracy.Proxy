@@ -82,7 +82,6 @@ namespace Tracy.Proxy
                 //写xml日志和性能日志
                 //发一次http请求，同时写xml日志和性能日志(fix发两次请求时由于网络因素导致的第1次请求成功，第2次请求失败)
                 WriteXmlPerformanceLog();
-
             }
         }
 
@@ -112,8 +111,6 @@ namespace Tracy.Proxy
                 xmlPerformanceLog.PerformanceLog = _PerfLog;
                 LogClientHelper.XmlPerformance(xmlPerformanceLog); 
             }
-
         }
-
     }
 }
