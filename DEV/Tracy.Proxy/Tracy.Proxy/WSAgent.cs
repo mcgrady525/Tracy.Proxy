@@ -106,10 +106,14 @@ namespace Tracy.Proxy
                 _PerfLog.MethodCName = MethodCName;
                 _PerfLog.Remark = "SSharing.Proxy";
 
-                var xmlPerformanceLog = new XmlPerformanceLog();
+                var xmlPerformanceLog = new XmlPerformanceLog()
+                {
+                    XmlLog = new XmlLog(),
+                    PerformanceLog = new PerformanceLog()
+                };
                 xmlPerformanceLog.XmlLog = _XmlLog;
                 xmlPerformanceLog.PerformanceLog = _PerfLog;
-                LogClientHelper.XmlPerformance(xmlPerformanceLog); 
+                LogClientHelper.XmlPerformance(xmlPerformanceLog);
             }
         }
     }
