@@ -10,7 +10,7 @@ using Tracy.Frameworks.LogClient.Helper;
 namespace Tracy.Proxy
 {
     /// <summary>
-    /// 外部接口代理
+    /// 调用接口代理
     /// 1，写xml日志
     /// 2，写性能日志
     /// </summary>
@@ -80,15 +80,16 @@ namespace Tracy.Proxy
             finally
             {
                 //写xml日志和性能日志
-                WriteXmlLog();
-                WritePerfLog();
+                //发一次http请求，同时写xml日志和性能日志(fix发两次请求时由于网络因素导致的第1次请求成功，第2次请求失败)
+                WriteXmlPerformanceLog();
+
             }
         }
 
         /// <summary>
-        /// 写xml日志
+        /// 同时写xml日志和性能日志
         /// </summary>
-        private void WriteXmlLog()
+        private void WriteXmlPerformanceLog()
         {
             if (IsWriteToLogSystem)
             {
@@ -100,25 +101,18 @@ namespace Tracy.Proxy
                 _XmlLog.RS = ResponseXml;
                 _XmlLog.Remark = "SSharing.Proxy";
 
-                LogClientHelper.Xml(_XmlLog); 
-            }
-        }
-
-        /// <summary>
-        /// 写性能日志
-        /// </summary>
-        private void WritePerfLog()
-        {
-            if (IsWriteToLogSystem)
-            {
                 _PerfLog.SystemCode = SystemCode;
                 _PerfLog.ClassName = ClassName;
                 _PerfLog.MethodName = MethodName;
                 _PerfLog.MethodCName = MethodCName;
                 _PerfLog.Remark = "SSharing.Proxy";
 
-                LogClientHelper.Performance(_PerfLog); 
+                var xmlPerformanceLog = new XmlPerformanceLog();
+                xmlPerformanceLog.XmlLog = _XmlLog;
+                xmlPerformanceLog.PerformanceLog = _PerfLog;
+                LogClientHelper.XmlPerformance(xmlPerformanceLog); 
             }
+
         }
 
     }
